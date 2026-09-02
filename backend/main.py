@@ -1,10 +1,9 @@
 from pathlib import Path
 
-from file_categories import get_category
+from scan import scan_folder
 
 downloads = Path.home() / "Downloads"
+files = scan_folder(downloads)
 
-for item in downloads.iterdir():
-    if item.is_file():
-        category = get_category(item)
-        print(item.name, category)
+for file in files:
+    print(file)
