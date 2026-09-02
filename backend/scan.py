@@ -48,3 +48,12 @@ def group_files(files):
         grouped[category][year]["files"].append(file)
         
     return grouped
+
+def create_summary(files, grouped):
+    total_size = sum(file["size"] for file in files)
+    
+    return {
+        "total_files": len(files),
+        "total_size": total_size,
+        "groups": grouped
+    }
