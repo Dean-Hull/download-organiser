@@ -25,3 +25,26 @@ def scan_folder(folder: Path):
         files.append(file)
         
     return files
+
+def group_files(files):
+    grouped = {}
+    
+    for file in files:
+        category = file["category"]
+        year = file["year"]
+        
+        if category not in grouped:
+            grouped[category] = {}
+            
+        if year not in grouped[category]:
+            grouped[category][year] = {
+                "count": 0,
+                "size": 0,
+                "files": [],
+            }
+        
+        grouped[category][year]["count"] += 1
+        grouped[category][year]["size"] += file["size"]
+        grouped[category][year]["files"].append(file)
+        
+    return grouped
