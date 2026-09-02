@@ -48,9 +48,9 @@ FILE_TYPES = {
 
 def get_file_categories(file: Path) -> str:
     extension = file.suffix.lower()
-    
+
     for category, extensions in FILE_TYPES.items():
         if extension in extensions:
             return category
-        
+
     return "Other"
