@@ -31,7 +31,3 @@ for category, years in grouped.items():
 print()
 print("Planned changes:")
 organise_files(files, downloads, dry_run=dry_run)
-
-print()
-print("Existing files organised:")
-migrate_existing_files(downloads, dry_run=dry_run)
