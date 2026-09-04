@@ -1,12 +1,13 @@
 from pathlib import Path
 
-from scan import create_summary, group_files, organise_files, scan_folder
+from scan import create_summary, group_files, migrate_existing_files, organise_files, scan_folder
 from utils import format_size
 
 downloads = Path.home() / "Downloads"
 files = scan_folder(downloads)
 grouped = group_files(files)
 summary = create_summary(files, grouped)
+dry_run = False
 
 print(
     f"Downloads: "
@@ -29,4 +30,4 @@ for category, years in grouped.items():
 
 print()
 print("Planned changes:")
-organise_files(files, downloads, dry_run=False)
+organise_files(files, downloads, dry_run=dry_run)
