@@ -11,6 +11,7 @@ def scan_folder(folder: Path):
             continue
 
         stat = item.stat()
+        modified = datetime.fromtimestamp(stat.st_mtime)
 
         file = {
             "name": item.name,
@@ -18,8 +19,9 @@ def scan_folder(folder: Path):
             "extension": item.suffix.lower(),
             "category": get_file_categories(item),
             "size": stat.st_size,
-            "modified": datetime.fromtimestamp(stat.st_mtime),
-            "year": datetime.fromtimestamp(stat.st_mtime).year
+            "modified": modified,
+            "year": datetime.fromtimestamp(stat.st_mtime).year,
+            "month": modified.strftime("%m-%B"),
         }
 
         files.append(file)
@@ -66,7 +68,7 @@ def organise_files(files, root: Path, dry_run: bool = True):
         source = Path(file["path"])
 
         destination_folder = (
-            root / file["category"] / str(file["year"])
+            root / file["category"] / str(file["year"]) / file["month"]
         )
 
         destination = destination_folder / source.name

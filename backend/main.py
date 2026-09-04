@@ -29,4 +29,4 @@ for category, years in grouped.items():
 
 print()
 print("Planned changes:")
-organise_files(files, downloads, dry_run=False)
+organise_files(files, downloads, dry_run=True)
