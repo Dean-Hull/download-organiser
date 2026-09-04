@@ -20,7 +20,7 @@ def scan_folder(folder: Path):
             "category": get_file_categories(item),
             "size": stat.st_size,
             "modified": modified,
-            "year": datetime.fromtimestamp(stat.st_mtime).year,
+            "year": modified.year,
             "month": modified.strftime("%m-%B"),
         }
 
@@ -85,3 +85,55 @@ def organise_files(files, root: Path, dry_run: bool = True):
         source.rename(destination)
 
         print(f"Moved: {source.name} -> {destination_folder}")
+
+def migrate_existing_files(root: Path, dry_run: bool = True,):
+    categories = {
+        "Archives",
+        "Audio",
+        "Documents",
+        "Images",
+        "Installers",
+        "Other",
+        "Videos",
+    }
+    
+    for category in categories:
+        category_folder = root / category
+        
+        if not category_folder.exists():
+            continue
+        
+        for year_folder in category_folder.iterdir():
+            if not year_folder.is_dir():
+                continue
+            
+            if not year_folder.name.isdigit():
+                continue
+            
+            if len(year_folder.name) != 4:
+                continue
+            
+            for source in year_folder.iterdir():
+                if not source.is_file():
+                    continue
+                
+                modified = datetime.fromtimestamp(source.stat().st_mtime)
+                
+                month = modified.strftime("%m-%B")
+                destination_folder = year_folder / month
+                destination = destination_folder / source.name
+                
+                if destination.exists():
+                    print(f"Skipped existing file: " f"{destination}")
+                    continue
+                
+                if dry_run:
+                    print(f"Would migrate: " f"{source} -> {destination}")
+                    continue
+                
+                destination_folder.mkdir(parents=True, exist_ok=True)
+                
+                source.rename(destination)
+                
+                print(f"Migrated: " f"{source} -> {destination}")
+                
